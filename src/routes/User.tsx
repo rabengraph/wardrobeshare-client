@@ -4,6 +4,7 @@ import UserDetailCard from "../components/UserDetailCard";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { RouteComponentProps } from "react-router";
+import LoadingFull from "../components/LoadingFull";
 
 const GET_PERSON = gql`
     query user($id: Int!) {
@@ -27,7 +28,7 @@ export default function UserC({ match }: RouteComponentProps<{ id: string }>) {
     console.log(match.params.id);
 
     console.log(data);
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <LoadingFull />;
     if (error || !user) return <p>Error :(</p>;
 
     return <UserDetailCard user={user} />;

@@ -36,7 +36,6 @@ const useStyles = makeStyles({
     },
     bottomRightButtons: {
         marginLeft: "auto",
-
         marginRight: 0,
     },
 });
@@ -50,11 +49,11 @@ export default function ClothingCard({ clothing }: Props) {
                 title={clothing.person ? `${clothing.person.name}, ${clothing.person.location.name}` : ""}
                 avatar={clothing.person ? <Avatar alt="Remy Sharp" src={clothing.person.avatar.previewUrl} className={classes.avatar} /> : null}
             />
-            <CardMedia className={classes.media} image={clothing.image.url} />
             <CardContent>
                 <Typography variant="h4" component="h1">
                     {clothing.name}
                 </Typography>
+                <img style={{ display: "block", height: "auto", maxWidth: "100%" }} src={clothing.image.url} />
                 <Typography variant="body2" color="textSecondary" component="p">
                     {clothing.description}
                 </Typography>

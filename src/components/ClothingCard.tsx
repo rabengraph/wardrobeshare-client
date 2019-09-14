@@ -13,6 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import ClothingSpecsTable from "./ClothingSpecsTable";
 import Fab from "@material-ui/core/Fab";
+import Grid from "@material-ui/core/Grid";
 
 interface Props {
     clothing: Clothing;
@@ -20,11 +21,16 @@ interface Props {
 const useStyles = makeStyles({
     card: {
         // maxWidth: 345,
-        // marginBottom: "40px",
+        marginBottom: "40px",
     },
     media: {
-        height: 0,
-        paddingTop: "56.25%", // 16:9
+        height: 300,
+
+        // height: 0,
+        // paddingTop: "56.25%", // 16:9
+    },
+    actions: {
+        padding: "30px 10px",
     },
 });
 
@@ -34,14 +40,21 @@ export default function ClothingCard({ clothing }: Props) {
     return (
         <Card className={classes.card}>
             <CardHeader title={clothing.name} />
-            <CardMedia className={classes.media} image={clothing.image.url} />
-            <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                    {clothing.description}
-                </Typography>
+            <Grid container spacing={2}>
+                <Grid xs={6} item>
+                    <CardMedia className={classes.media} image={clothing.image.url} />
+                </Grid>
+                <Grid xs={6} item>
+                    <CardContent>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            {clothing.description}
+                        </Typography>
+                    </CardContent>
+                </Grid>
                 <ClothingSpecsTable clothing={clothing} />
-            </CardContent>
-            <CardActions disableSpacing>
+            </Grid>
+
+            <CardActions className={classes.actions}>
                 <Link to={`/clothing/${clothing.id}`}>
                     <Fab variant="extended" color="primary" aria-label="add">
                         <ShoppingCartIcon />

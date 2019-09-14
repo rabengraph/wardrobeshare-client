@@ -4,6 +4,7 @@ import ClothingDetailCard from "../components/ClothingDetailCard";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { RouteComponentProps } from "react-router";
+import LoadingFull from "../components/LoadingFull";
 
 const GET_CLOTHING = gql`
     query clothing($id: Int!) {
@@ -28,7 +29,7 @@ export default function UserC({ match }: RouteComponentProps<{ id: string }>) {
     });
     const clothing = data ? (data.clothing as Clothing) : null;
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <LoadingFull />;
     if (error || !clothing) return <p>Error :(</p>;
 
     return <ClothingDetailCard clothing={clothing} />;
