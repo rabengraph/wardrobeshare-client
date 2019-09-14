@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { User } from "../types";
 import { Link } from "react-router-dom";
+import ClothingCard from "./ClothingCard";
 
 interface Props {
     user: User;
@@ -23,7 +24,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function UserCard({ user }: Props) {
+export default function MediaCard({ user }: Props) {
     const classes = useStyles();
 
     return (
@@ -37,21 +38,22 @@ export default function UserCard({ user }: Props) {
                     <Typography gutterBottom variant="subtitle1" component="h3">
                         {user.location.name}
                     </Typography>
+                    <Typography gutterBottom variant="subtitle2" component="h3">
+                        {user.slogan}
+                    </Typography>
                     <Typography variant="subtitle2" component="h6">
                         {user.name}'s Wardrobe
                     </Typography>
-                    <div style={{ display: "flex" }}>
+                    <div>
                         {user.clothings.map(c => (
-                            <div key={c.id}>
-                                <img src={c.image.previewUrl} alt="" />
-                            </div>
+                            <ClothingCard key={c.id} clothing={c} />
                         ))}
                     </div>
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Link to={`/user/${user.id}`}>
-                    <Button color="primary">More</Button>
+                <Link to={`/`}>
+                    <Button color="primary">Back</Button>
                 </Link>
             </CardActions>
         </Card>

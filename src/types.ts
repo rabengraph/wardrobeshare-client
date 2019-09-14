@@ -8,6 +8,18 @@ export interface Clothing {
     id: number;
     name: string;
     image: Image;
+    size: string;
+    bust?: number;
+    waist?: number;
+    hips?: number;
+    description: string;
+    price: number;
+    person?: User;
+}
+
+export interface Location {
+    id: number;
+    name: string;
 }
 
 export interface User {
@@ -16,4 +28,6 @@ export interface User {
     email: string;
     avatar: Image;
     clothings: Clothing[];
+    location: Location;
+    slogan: string;
 }

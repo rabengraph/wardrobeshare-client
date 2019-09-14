@@ -1,11 +1,13 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Home from "./routes/Home";
+import User from "./routes/User";
+import Clothing from "./routes/Clothing";
+import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { RestLink } from "apollo-link-rest";
-import gql from "graphql-tag";
-import { User } from "./types";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-import Home from "./routes/Home";
+
 // setup your `RestLink` with your endpoint
 const restLink = new RestLink({ uri: process.env.REACT_APP_API_ENTRYPOINT });
 
@@ -15,35 +17,20 @@ const client = new ApolloClient({
     cache: new InMemoryCache(),
 });
 
-const query = gql`
-    query luke {
-        persons @rest(type: "User", path: "users/") {
-            name
-            avatar
-            clothings
-        }
-    }
-`;
-
 const App: React.FC = () => {
-    const [users, setUsers] = React.useState<User[]>([]);
-    React.useEffect(() => {
-        // Invoke the query and log the person's name
-        client.query({ query }).then(response => {
-            console.log(response.data);
-            const data = response.data.persons as User[];
-            setUsers(data);
-        });
-    }, []);
     return (
-        <div className="App">
-            <header></header>
-            <Router>
-                <Switch>
-                    <Route exact path="/" render={() => <Home users={users} />} />
-                </Switch>
-            </Router>
-        </div>
+        <ApolloProvider client={client}>
+            <div className="App">
+                <header></header>
+                <Router>
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/user/:id" component={User} />
+                        <Route exact path="/clothing/:id" component={Clothing} />
+                    </Switch>
+                </Router>
+            </div>
+        </ApolloProvider>
     );
 };
 
