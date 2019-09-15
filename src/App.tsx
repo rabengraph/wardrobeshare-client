@@ -7,6 +7,7 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { RestLink } from "apollo-link-rest";
+import AppBar from "./AppBar";
 
 // setup your `RestLink` with your endpoint
 const restLink = new RestLink({ uri: process.env.REACT_APP_API_ENTRYPOINT });
@@ -21,8 +22,9 @@ const App: React.FC = () => {
     return (
         <ApolloProvider client={client}>
             <div className="App">
-                <header></header>
                 <Router>
+                    <Route component={AppBar} />
+
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/user/:id" component={User} />
