@@ -4,6 +4,7 @@ import UserCard from "../components/UserCard";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import LoadingFull from "../components/LoadingFull";
+import { RouteComponentProps } from "react-router";
 
 const GET_PERSONS = gql`
     query persons {
@@ -17,7 +18,7 @@ const GET_PERSONS = gql`
     }
 `;
 
-export default function Home() {
+export default function Home({ history }: RouteComponentProps) {
     const { loading, error, data } = useQuery(GET_PERSONS);
     const users = data ? (data.persons as User[]) : [];
 
@@ -26,7 +27,7 @@ export default function Home() {
     return (
         <>
             {users.map(c => (
-                <UserCard key={c.id} user={c} />
+                <UserCard key={c.id} user={c} history={history} />
             ))}
         </>
     );

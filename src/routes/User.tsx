@@ -19,7 +19,7 @@ const GET_PERSON = gql`
     }
 `;
 
-export default function UserC({ match }: RouteComponentProps<{ id: string }>) {
+export default function UserC({ match, history }: RouteComponentProps<{ id: string }>) {
     const { loading, error, data } = useQuery(GET_PERSON, {
         variables: { id: Number(match.params.id) },
     });

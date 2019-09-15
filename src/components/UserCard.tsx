@@ -9,9 +9,11 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { User } from "../types";
 import { Link } from "react-router-dom";
+import { RouteComponentProps } from "react-router";
 
 interface Props {
     user: User;
+    history: RouteComponentProps["history"];
 }
 const useStyles = makeStyles({
     card: {
@@ -23,14 +25,14 @@ const useStyles = makeStyles({
     },
 });
 
-export default function UserCard({ user }: Props) {
+export default function UserCard({ user, history }: Props) {
     const classes = useStyles();
 
     return (
         <Card className={classes.card}>
             <CardActionArea>
-                {user.avatar && <CardMedia className={classes.media} image={user.avatar.url} />}
-                <CardContent>
+                {user.avatar && <CardMedia onClick={() => history.push(`/user/${user.id}`)} className={classes.media} image={user.avatar.url} />}
+                <CardContent onClick={() => history.push(`/user/${user.id}`)}>
                     <Typography variant="h4" component="h2">
                         {user.name}
                     </Typography>
@@ -40,14 +42,16 @@ export default function UserCard({ user }: Props) {
                     <Typography variant="subtitle2" component="h6">
                         {user.name}'s Wardrobe
                     </Typography>
-                    <div style={{ display: "flex" }}>
-                        {user.clothings.map(c => (
+                </CardContent>
+                <div style={{ display: "flex", overflowX: "scroll" }}>
+                    {user.clothings.map(c => (
+                        <Link to={`/clothing/${c.id}`}>
                             <div key={c.id}>
                                 <img src={c.image.previewUrl} alt="" />
                             </div>
-                        ))}
-                    </div>
-                </CardContent>
+                        </Link>
+                    ))}
+                </div>
             </CardActionArea>
             <CardActions>
                 <Link to={`/user/${user.id}`}>

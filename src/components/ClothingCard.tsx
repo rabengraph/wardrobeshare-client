@@ -42,7 +42,9 @@ export default function ClothingCard({ clothing }: Props) {
             <CardHeader title={clothing.name} />
             <Grid container spacing={2}>
                 <Grid xs={6} item>
-                    <CardMedia className={classes.media} image={clothing.image.url} />
+                    <Link to={`/clothing/${clothing.id}`}>
+                        <CardMedia className={classes.media} image={clothing.image.url} />
+                    </Link>
                 </Grid>
                 <Grid xs={6} item>
                     <CardContent>

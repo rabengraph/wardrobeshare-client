@@ -16,15 +16,18 @@ import Fab from "@material-ui/core/Fab";
 import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
 import HomeIcon from "@material-ui/icons/Home";
+import { RouteComponentProps } from "react-router";
 
 interface Props {
     clothing: Clothing;
+    history: RouteComponentProps["history"];
 }
 const useStyles = makeStyles({
     card: {
         // maxWidth: 345,
         // marginBottom: "40px",
     },
+
     media: {
         height: 0,
         paddingTop: "56.25%", // 16:9
@@ -38,14 +41,19 @@ const useStyles = makeStyles({
         marginLeft: "auto",
         marginRight: 0,
     },
+    cardHeader: {
+        cursor: "pointer",
+    },
 });
 
-export default function ClothingCard({ clothing }: Props) {
+export default function ClothingCard({ clothing, history }: Props) {
     const classes = useStyles();
 
     return (
         <Card className={classes.card}>
             <CardHeader
+                className={classes.cardHeader}
+                onClick={() => (clothing.person ? history.push(`/user/${clothing.person.id}`) : null)}
                 title={clothing.person ? `${clothing.person.name}, ${clothing.person.location.name}` : ""}
                 avatar={clothing.person ? <Avatar alt="Remy Sharp" src={clothing.person.avatar.previewUrl} className={classes.avatar} /> : null}
             />

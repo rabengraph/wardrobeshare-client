@@ -23,7 +23,7 @@ const GET_CLOTHING = gql`
     }
 `;
 
-export default function UserC({ match }: RouteComponentProps<{ id: string }>) {
+export default function UserC({ match, history }: RouteComponentProps<{ id: string }>) {
     const { loading, error, data } = useQuery(GET_CLOTHING, {
         variables: { id: Number(match.params.id) },
     });
@@ -32,5 +32,5 @@ export default function UserC({ match }: RouteComponentProps<{ id: string }>) {
     if (loading) return <LoadingFull />;
     if (error || !clothing) return <p>Error :(</p>;
 
-    return <ClothingDetailCard clothing={clothing} />;
+    return <ClothingDetailCard clothing={clothing} history={history} />;
 }
