@@ -36,7 +36,7 @@ export default function MediaCard({ user }: Props) {
                         {user.name}
                     </Typography>
                     <Typography gutterBottom variant="subtitle1" component="h3">
-                        {user.location.city}
+                        {user.location.city}, {user.location.country}
                     </Typography>
                     <Typography gutterBottom variant="subtitle2" component="h3">
                         {user.slogan}

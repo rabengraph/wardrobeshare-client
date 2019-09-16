@@ -37,7 +37,7 @@ export default function UserCard({ user, history }: Props) {
                         {user.name}
                     </Typography>
                     <Typography gutterBottom variant="subtitle1" component="h3">
-                        {user.location.city}
+                        {user.location.city}, {user.location.country}
                     </Typography>
                     <Typography variant="subtitle2" component="h6">
                         {user.name}'s Wardrobe

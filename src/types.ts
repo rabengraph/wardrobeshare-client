@@ -15,11 +15,14 @@ export interface Clothing {
     description: string;
     price: number;
     person?: User;
+    color: Color[];
+    manufacturer: Manufacturer;
 }
 
 export interface Location {
     id: number;
     city: string;
+    country: string;
 }
 
 export interface User {
@@ -30,4 +33,15 @@ export interface User {
     clothings: Clothing[];
     location: Location;
     slogan: string;
+}
+
+export interface Manufacturer {
+    id: number;
+    name: string;
+}
+
+export interface Color {
+    id: number;
+    name: string;
+    hex: string;
 }

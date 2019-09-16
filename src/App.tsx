@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./routes/Home";
 import User from "./routes/User";
 import Clothing from "./routes/Clothing";
+import ClothingsFilter from "./routes/ClothingsFilter";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
@@ -24,9 +25,9 @@ const App: React.FC = () => {
             <div className="App">
                 <Router>
                     <Route component={AppBar} />
-
                     <Switch>
                         <Route exact path="/" component={Home} />
+                        <Route exact path="/clothingsfilter" component={ClothingsFilter} />
                         <Route exact path="/user/:id" component={User} />
                         <Route exact path="/clothing/:id" component={Clothing} />
                     </Switch>
