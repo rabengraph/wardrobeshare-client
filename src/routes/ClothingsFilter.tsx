@@ -17,7 +17,7 @@ const MAX_PRICE = 200;
 
 const GET_CLOTHINGS = gql`
     query clothings($querystring: String) {
-        clothings(querystring: $querystring) @rest(type: "Clothings", path: "clothings/?{args.querystring}") {
+        clothings(querystring: $querystring) @rest(type: "Clothings", path: "clothings?{args.querystring}") {
             id
             name
             image
