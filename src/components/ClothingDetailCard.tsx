@@ -54,7 +54,7 @@ export default function ClothingCard({ clothing, history }: Props) {
             <CardHeader
                 className={classes.cardHeader}
                 onClick={() => (clothing.person ? history.push(`/user/${clothing.person.id}`) : null)}
-                title={clothing.person ? `${clothing.person.name}, ${clothing.person.location.name}` : ""}
+                title={clothing.person ? `${clothing.person.name}, ${clothing.person.location.city}` : ""}
                 avatar={clothing.person ? <Avatar alt="Remy Sharp" src={clothing.person.avatar.previewUrl} className={classes.avatar} /> : null}
             />
             <CardContent>

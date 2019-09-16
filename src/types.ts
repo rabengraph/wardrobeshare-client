@@ -19,7 +19,7 @@ export interface Clothing {
 
 export interface Location {
     id: number;
-    name: string;
+    city: string;
 }
 
 export interface User {
