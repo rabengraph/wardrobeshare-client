@@ -125,7 +125,7 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
     };
 
     if (getMaxMinLngLat({ myLatitude, myLongitude, maxDistance })) {
-        const maxMinLngLat = getMaxMinLngLat({ myLatitude, myLongitude, maxDistance });
+        const maxMinLngLat = getMaxMinLngLat({ myLatitude: Math.round(myLatitude!), myLongitude: Math.round(myLongitude!), maxDistance });
         if (maxMinLngLat) {
             const { lngMax, lngMin, latMax, latMin } = maxMinLngLat!;
             query["person.location.lat[between]"] = `${latMin}..${latMax}`;
@@ -184,124 +184,124 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                 open={controlsVisible}
                 onClose={toggleDrawer(false)}
             >
-                <div style={{padding : '10px'}}>
-                <FormGroup>
-                    <Typography gutterBottom>Price</Typography>
-                    <StyledSlider
-                        valueLabelDisplay="auto"
-                        min={0}
-                        max={MAX_PRICE}
-                        step={10}
-                        defaultValue={priceRange}
-                        onChangeCommitted={(e, newValues) => handleRangeChange(setPriceRange)(newValues)}
-                    />
-                    <Typography gutterBottom>Rating</Typography>
-                    <Rating
-                        value={minRating}
-                        onChange={(event, newValue) => {
-                            setMinRating(newValue);
-                        }}
-                    />
+                <div style={{ padding: "10px" }}>
+                    <FormGroup>
+                        <Typography gutterBottom>Price</Typography>
+                        <StyledSlider
+                            valueLabelDisplay="auto"
+                            min={0}
+                            max={MAX_PRICE}
+                            step={10}
+                            defaultValue={priceRange}
+                            onChangeCommitted={(e, newValues) => handleRangeChange(setPriceRange)(newValues)}
+                        />
+                        <Typography gutterBottom>Rating</Typography>
+                        <Rating
+                            value={minRating}
+                            onChange={(event, newValue) => {
+                                setMinRating(newValue);
+                            }}
+                        />
 
-                    <Typography gutterBottom>Colors</Typography>
-                    <FormGroup row>
-                        {availableColors.length > 0 &&
-                            availableColors.map(c => (
-                                <div style={{ padding: "2px" }} key={c.id}>
-                                    <ColorableCheckbox
-                                        color="default"
-                                        hexColor={c.hex}
-                                        checked={colors.includes(c.id)}
-                                        onChange={(e, checked) => {
-                                            setColors(cols => (checked ? [...cols, c.id] : cols.filter(c2 => c2 !== c.id)));
-                                        }}
-                                    />
-                                </div>
-                            ))}
-                    </FormGroup>
+                        <Typography gutterBottom>Colors</Typography>
+                        <FormGroup row>
+                            {availableColors.length > 0 &&
+                                availableColors.map(c => (
+                                    <div style={{ padding: "2px" }} key={c.id}>
+                                        <ColorableCheckbox
+                                            color="default"
+                                            hexColor={c.hex}
+                                            checked={colors.includes(c.id)}
+                                            onChange={(e, checked) => {
+                                                setColors(cols => (checked ? [...cols, c.id] : cols.filter(c2 => c2 !== c.id)));
+                                            }}
+                                        />
+                                    </div>
+                                ))}
+                        </FormGroup>
 
-                    <Typography gutterBottom>Size</Typography>
-                    <FormGroup row>
-                        {availableSizes.map(c => (
-                            <FormControlLabel
-                                key={c}
-                                control={
-                                    <Checkbox
-                                        color="default"
-                                        checked={sizes.includes(c)}
-                                        onChange={(e, checked) => {
-                                            setSizes(szs => (checked ? [...szs, c] : szs.filter(c2 => c2 !== c)));
-                                        }}
-                                    />
-                                }
-                                label={c}
-                            />
-                        ))}
-                    </FormGroup>
-
-                    <Typography gutterBottom>Bust</Typography>
-                    <StyledSlider
-                        valueLabelDisplay="auto"
-                        min={29}
-                        max={45}
-                        step={1}
-                        defaultValue={bustRange}
-                        onChangeCommitted={(e, newValues) => handleRangeChange(setBustRange)(newValues)}
-                    />
-                    <Typography gutterBottom>Waist</Typography>
-                    <StyledSlider
-                        valueLabelDisplay="auto"
-                        min={29}
-                        max={45}
-                        step={1}
-                        defaultValue={waistRange}
-                        onChangeCommitted={(e, newValues) => handleRangeChange(setWaistRange)(newValues)}
-                    />
-                    <Typography gutterBottom>Hips</Typography>
-                    <StyledSlider
-                        valueLabelDisplay="auto"
-                        min={29}
-                        max={45}
-                        step={1}
-                        defaultValue={hipsRange}
-                        onChangeCommitted={(e, newValues) => handleRangeChange(setHipsRange)(newValues)}
-                    />
-
-                    <Typography gutterBottom>Manufacturers</Typography>
-                    <FormGroup row>
-                        {availableManufacturers.length > 0 &&
-                            availableManufacturers.map(c => (
+                        <Typography gutterBottom>Size</Typography>
+                        <FormGroup row>
+                            {availableSizes.map(c => (
                                 <FormControlLabel
-                                    key={c.id}
+                                    key={c}
                                     control={
                                         <Checkbox
                                             color="default"
-                                            checked={manufacturers.includes(c.id)}
+                                            checked={sizes.includes(c)}
                                             onChange={(e, checked) => {
-                                                setManufacturers(fctrs => (checked ? [...fctrs, c.id] : fctrs.filter(c2 => c2 !== c.id)));
+                                                setSizes(szs => (checked ? [...szs, c] : szs.filter(c2 => c2 !== c)));
                                             }}
                                         />
                                     }
-                                    label={c.name}
+                                    label={c}
                                 />
                             ))}
-                    </FormGroup>
+                        </FormGroup>
 
-                    <Typography gutterBottom>Max Distance</Typography>
-                    <StyledSlider
-                        valueLabelDisplay="auto"
-                        min={10}
-                        max={MAX_DISTANCE}
-                        step={100}
-                        defaultValue={maxDistance}
-                        onChangeCommitted={(e, newValues) => {
-                            if (!geolocationNeeded) {
-                                setGeolocationNeeded(true);
-                            }
-                            setMaxDistance(newValues as number);
-                        }}
-                    />
-                </FormGroup>
+                        <Typography gutterBottom>Bust</Typography>
+                        <StyledSlider
+                            valueLabelDisplay="auto"
+                            min={29}
+                            max={45}
+                            step={1}
+                            defaultValue={bustRange}
+                            onChangeCommitted={(e, newValues) => handleRangeChange(setBustRange)(newValues)}
+                        />
+                        <Typography gutterBottom>Waist</Typography>
+                        <StyledSlider
+                            valueLabelDisplay="auto"
+                            min={29}
+                            max={45}
+                            step={1}
+                            defaultValue={waistRange}
+                            onChangeCommitted={(e, newValues) => handleRangeChange(setWaistRange)(newValues)}
+                        />
+                        <Typography gutterBottom>Hips</Typography>
+                        <StyledSlider
+                            valueLabelDisplay="auto"
+                            min={29}
+                            max={45}
+                            step={1}
+                            defaultValue={hipsRange}
+                            onChangeCommitted={(e, newValues) => handleRangeChange(setHipsRange)(newValues)}
+                        />
+
+                        <Typography gutterBottom>Manufacturers</Typography>
+                        <FormGroup row>
+                            {availableManufacturers.length > 0 &&
+                                availableManufacturers.map(c => (
+                                    <FormControlLabel
+                                        key={c.id}
+                                        control={
+                                            <Checkbox
+                                                color="default"
+                                                checked={manufacturers.includes(c.id)}
+                                                onChange={(e, checked) => {
+                                                    setManufacturers(fctrs => (checked ? [...fctrs, c.id] : fctrs.filter(c2 => c2 !== c.id)));
+                                                }}
+                                            />
+                                        }
+                                        label={c.name}
+                                    />
+                                ))}
+                        </FormGroup>
+
+                        <Typography gutterBottom>Max Distance</Typography>
+                        <StyledSlider
+                            valueLabelDisplay="auto"
+                            min={10}
+                            max={MAX_DISTANCE}
+                            step={100}
+                            defaultValue={maxDistance}
+                            onChangeCommitted={(e, newValues) => {
+                                if (!geolocationNeeded) {
+                                    setGeolocationNeeded(true);
+                                }
+                                setMaxDistance(newValues as number);
+                            }}
+                        />
+                    </FormGroup>
                 </div>
             </Drawer>
             {loading && <Loading />}
