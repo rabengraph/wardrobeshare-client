@@ -34,13 +34,10 @@ export default function UserCard({ user, history }: Props) {
                 {user.avatar && <CardMedia onClick={() => history.push(`/user/${user.id}`)} className={classes.media} image={user.avatar.url} />}
                 <CardContent onClick={() => history.push(`/user/${user.id}`)}>
                     <Typography variant="h4" component="h2">
-                        {user.name}
+                    {user.name}'s Wardrobe
                     </Typography>
                     <Typography gutterBottom variant="subtitle1" component="h3">
                         {user.location.city}, {user.location.country}
-                    </Typography>
-                    <Typography variant="subtitle2" component="h6">
-                        {user.name}'s Wardrobe
                     </Typography>
                 </CardContent>
                 <div style={{ display: "flex", overflowX: "scroll" }}>

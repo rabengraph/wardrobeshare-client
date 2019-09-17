@@ -11,7 +11,10 @@ import { RestLink } from "apollo-link-rest";
 import AppBar from "./AppBar";
 
 // setup your `RestLink` with your endpoint
-const restLink = new RestLink({ uri: process.env.REACT_APP_API_ENTRYPOINT });
+const restLink = new RestLink({
+    uri: process.env.REACT_APP_API_ENTRYPOINT,
+    // responseTransformer: async response => response.json().then((r: any) => r["hydra:member"]),
+});
 
 // setup your client
 const client = new ApolloClient({

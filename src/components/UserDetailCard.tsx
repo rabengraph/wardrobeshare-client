@@ -33,7 +33,7 @@ export default function MediaCard({ user }: Props) {
                 {user.avatar && <CardMedia className={classes.media} image={user.avatar.url} />}
                 <CardContent>
                     <Typography variant="h4" component="h2">
-                        {user.name}
+                    {user.name}'s Wardrobe
                     </Typography>
                     <Typography gutterBottom variant="subtitle1" component="h3">
                         {user.location.city}, {user.location.country}
@@ -41,9 +41,7 @@ export default function MediaCard({ user }: Props) {
                     <Typography gutterBottom variant="subtitle2" component="h3">
                         {user.slogan}
                     </Typography>
-                    <Typography variant="subtitle2" component="h6">
-                        {user.name}'s Wardrobe
-                    </Typography>
+  
                     <div>
                         {user.clothings.map(c => (
                             <ClothingCard key={c.id} clothing={c} />

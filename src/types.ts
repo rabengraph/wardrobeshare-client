@@ -15,7 +15,7 @@ export interface Clothing {
     description: string;
     price: number;
     person?: User;
-    color: Color[];
+    colors: Color[];
     manufacturer: Manufacturer;
 }
 
@@ -33,6 +33,7 @@ export interface User {
     clothings: Clothing[];
     location: Location;
     slogan: string;
+    rating: number;
 }
 
 export interface Manufacturer {
