@@ -223,7 +223,7 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                 <div style={{ padding: "16px" }}>
                     <FormGroup>
                         <Typography variant="h6" gutterBottom>
-                            Price
+                            Price ($ {priceRange[0]} - {priceRange[1]})
                         </Typography>
                         <StyledSlider
                             valueLabelDisplay="auto"

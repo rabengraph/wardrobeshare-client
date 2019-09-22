@@ -47,7 +47,7 @@ export default function MenuAppBar({ history }: Props) {
                         variant="h6"
                         className={classes.title}
                     >
-                        Shecon
+                        Sharobe
                     </Typography>
                 </Toolbar>
             </AppBar>
