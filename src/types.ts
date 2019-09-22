@@ -17,6 +17,8 @@ export interface Clothing {
     person?: User;
     colors: Color[];
     manufacturer: Manufacturer;
+    eventsWorn: Event[];
+    cultures: Culture[];
 }
 
 export interface Location {
@@ -45,4 +47,20 @@ export interface Color {
     id: number;
     name: string;
     hex: string;
+}
+
+export interface Occasion {
+    id: number;
+    name: string;
+}
+export interface Culture {
+    id: number;
+    name: string;
+}
+
+export interface Event {
+    id: number;
+    date: string;
+    occasion: Occasion;
+    person: User;
 }

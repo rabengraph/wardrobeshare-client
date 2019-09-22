@@ -19,7 +19,13 @@ import HomeIcon from "@material-ui/icons/Home";
 import { RouteComponentProps } from "react-router";
 import AvatarTitle from "./AvatarTitle";
 import ColorPoint from "./ColorPoint";
-
+import Chip from "@material-ui/core/Chip";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ImageIcon from "@material-ui/icons/Image";
+import WorkIcon from "@material-ui/icons/Work";
 interface Props {
     clothing: Clothing;
     history: RouteComponentProps["history"];
@@ -29,7 +35,9 @@ const useStyles = makeStyles({
         // maxWidth: 345,
         // marginBottom: "40px",
     },
-
+    chip: {
+        margin: "2px",
+    },
     media: {
         height: 0,
         paddingTop: "56.25%", // 16:9
@@ -66,17 +74,41 @@ export default function ClothingInFilterCard({ clothing, history }: Props) {
                 <Typography variant="h5" component="h2">
                     {clothing.manufacturer.name}
                 </Typography>
+                <Typography variant="h5" component="h2">
+                    {clothing.cultures.map(c => (
+                        <Chip key={c.id} label={c.name} className={classes.chip} />
+                    ))}
+                </Typography>
                 <div>
-                    {clothing.colors.map(c => <ColorPoint key={c.id} color={c.hex}/>)}
+                    {clothing.colors.map(c => (
+                        <ColorPoint key={c.id} color={c.hex} />
+                    ))}
                 </div>
                 <img style={{ display: "block", height: "auto", maxWidth: "100%" }} src={clothing.image.url} />
                 <Typography variant="body2" color="textSecondary" component="p">
                     {clothing.description}
                 </Typography>
                 <ClothingSpecsTable clothing={clothing} />
+                <List>
+                    {clothing.eventsWorn.map(c => (
+                        <ListItem key={c.id}>
+                            <ListItemAvatar>
+                                <Avatar
+                                    alt=""
+                                    src={c.person.avatar.previewUrl}
+                                    className={classes.avatar}
+                                    onClick={() => {
+                                        history.push(`/user/${c.person.id}`);
+                                    }}
+                                />
+                            </ListItemAvatar>
+                            <ListItemText primary={c.occasion.name} secondary={c.date} />
+                        </ListItem>
+                    ))}
+                </List>
             </CardContent>
             <CardActions disableSpacing>
-                <Fab variant="extended" color="primary" aria-label="add" onClick={()=> history.push(`/clothing/${clothing.id}`)}>
+                <Fab variant="extended" color="primary" aria-label="add" onClick={() => history.push(`/clothing/${clothing.id}`)}>
                     <ShoppingCartIcon />
                     Rent for $ {clothing.price}
                 </Fab>

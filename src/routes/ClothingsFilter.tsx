@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Clothing, Color, Manufacturer } from "../types";
+import { Clothing, Color, Manufacturer, Occasion, Culture } from "../types";
 import ClothingInFilterCard from "../components/ClothingInFilterCard";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
@@ -7,6 +7,7 @@ import Loading from "../components/Loading";
 import { RouteComponentProps } from "react-router";
 import Drawer from "@material-ui/core/Drawer";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import CloseIcon from "@material-ui/icons/Close";
 import Fab from "@material-ui/core/Fab";
 import { makeStyles, useTheme, Theme, createStyles } from "@material-ui/core/styles";
 import StyledSlider from "../components/StyledSlider";
@@ -18,7 +19,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import useGeolocation from "../hooks/useGeolocation";
-import { getBoundsOfDistance, convertDistance } from "geolib";
+import { getBoundsOfDistance } from "geolib";
 
 const MAX_PRICE = 200;
 const MAX_DISTANCE = 10000;
@@ -38,6 +39,8 @@ const GET_CLOTHINGS = gql`
             person
             colors
             manufacturer
+            eventsWorn
+            cultures
         }
     }
 `;
@@ -61,11 +64,34 @@ const GET_MANUFACTURERS = gql`
     }
 `;
 
+const GET_OCCASIONS = gql`
+    query occasions {
+        occasions @rest(type: "Occasions", path: "occasions/") {
+            id
+            name
+        }
+    }
+`;
+
+const GET_CULTURES = gql`
+    query cultures {
+        cultures @rest(type: "Cultures", path: "cultures/") {
+            id
+            name
+        }
+    }
+`;
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        fab: {
+        fabBottom: {
             position: "fixed",
             bottom: theme.spacing(2),
+            right: theme.spacing(2),
+        },
+        fabTop: {
+            position: "fixed",
+            top: theme.spacing(2),
             right: theme.spacing(2),
         },
         drawerPaper: {
@@ -108,6 +134,8 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
     const [hipsRange, setHipsRange] = useState<[number, number]>([29, 45]);
     const [sizes, setSizes] = useState<string[]>([]);
     const [manufacturers, setManufacturers] = useState<number[]>([]);
+    const [occasions, setOccasions] = useState<number[]>([]);
+    const [cultures, setCultures] = useState<number[]>([]);
     const [maxDistance, setMaxDistance] = useState<number>(40000);
     const [geolocationNeeded, setGeolocationNeeded] = useState(false);
 
@@ -122,6 +150,8 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
         "waist[between]": `${waistRange[0]}..${waistRange[1]}`,
         "hips[between]": `${hipsRange[0]}..${hipsRange[1]}`,
         manufacturer: manufacturers,
+        "eventsWorn.occasion": occasions,
+        cultures: cultures,
     };
 
     if (getMaxMinLngLat({ myLatitude, myLongitude, maxDistance })) {
@@ -151,6 +181,12 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
 
     const { data: manufacturersData } = useQuery(GET_MANUFACTURERS);
     const availableManufacturers = manufacturersData ? (manufacturersData.manufacturers as Manufacturer[]) : [];
+
+    const { data: occasionsData } = useQuery(GET_OCCASIONS);
+    const availableOccasions = occasionsData ? (occasionsData.occasions as Occasion[]) : [];
+
+    const { data: culturesData } = useQuery(GET_CULTURES);
+    const availableCultures = culturesData ? (culturesData.cultures as Culture[]) : [];
 
     const [controlsVisible, setControlsVisible] = useState(false);
 
@@ -184,9 +220,11 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                 open={controlsVisible}
                 onClose={toggleDrawer(false)}
             >
-                <div style={{ padding: "10px" }}>
+                <div style={{ padding: "16px" }}>
                     <FormGroup>
-                        <Typography gutterBottom>Price</Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Price
+                        </Typography>
                         <StyledSlider
                             valueLabelDisplay="auto"
                             min={0}
@@ -195,7 +233,9 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                             defaultValue={priceRange}
                             onChangeCommitted={(e, newValues) => handleRangeChange(setPriceRange)(newValues)}
                         />
-                        <Typography gutterBottom>Rating</Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Rating
+                        </Typography>
                         <Rating
                             value={minRating}
                             onChange={(event, newValue) => {
@@ -203,7 +243,9 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                             }}
                         />
 
-                        <Typography gutterBottom>Colors</Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Colors
+                        </Typography>
                         <FormGroup row>
                             {availableColors.length > 0 &&
                                 availableColors.map(c => (
@@ -220,7 +262,9 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                                 ))}
                         </FormGroup>
 
-                        <Typography gutterBottom>Size</Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Size
+                        </Typography>
                         <FormGroup row>
                             {availableSizes.map(c => (
                                 <FormControlLabel
@@ -239,7 +283,9 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                             ))}
                         </FormGroup>
 
-                        <Typography gutterBottom>Bust</Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Bust ({bustRange[0]} - {bustRange[1]})
+                        </Typography>
                         <StyledSlider
                             valueLabelDisplay="auto"
                             min={29}
@@ -248,7 +294,9 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                             defaultValue={bustRange}
                             onChangeCommitted={(e, newValues) => handleRangeChange(setBustRange)(newValues)}
                         />
-                        <Typography gutterBottom>Waist</Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Waist ({waistRange[0]} - {waistRange[1]})
+                        </Typography>
                         <StyledSlider
                             valueLabelDisplay="auto"
                             min={29}
@@ -257,7 +305,9 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                             defaultValue={waistRange}
                             onChangeCommitted={(e, newValues) => handleRangeChange(setWaistRange)(newValues)}
                         />
-                        <Typography gutterBottom>Hips</Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Hips ({hipsRange[0]} - {hipsRange[1]})
+                        </Typography>
                         <StyledSlider
                             valueLabelDisplay="auto"
                             min={29}
@@ -267,7 +317,9 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                             onChangeCommitted={(e, newValues) => handleRangeChange(setHipsRange)(newValues)}
                         />
 
-                        <Typography gutterBottom>Manufacturers</Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Manufacturers
+                        </Typography>
                         <FormGroup row>
                             {availableManufacturers.length > 0 &&
                                 availableManufacturers.map(c => (
@@ -287,7 +339,53 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                                 ))}
                         </FormGroup>
 
-                        <Typography gutterBottom>Max Distance</Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Occasions
+                        </Typography>
+                        <FormGroup row>
+                            {availableOccasions.length > 0 &&
+                                availableOccasions.map(c => (
+                                    <FormControlLabel
+                                        key={c.id}
+                                        control={
+                                            <Checkbox
+                                                color="default"
+                                                checked={occasions.includes(c.id)}
+                                                onChange={(e, checked) => {
+                                                    setOccasions(ocsns => (checked ? [...ocsns, c.id] : ocsns.filter(c2 => c2 !== c.id)));
+                                                }}
+                                            />
+                                        }
+                                        label={c.name}
+                                    />
+                                ))}
+                        </FormGroup>
+
+                        <Typography variant="h6" gutterBottom>
+                            Culture
+                        </Typography>
+                        <FormGroup row>
+                            {availableCultures.length > 0 &&
+                                availableCultures.map(c => (
+                                    <FormControlLabel
+                                        key={c.id}
+                                        control={
+                                            <Checkbox
+                                                color="default"
+                                                checked={cultures.includes(c.id)}
+                                                onChange={(e, checked) => {
+                                                    setCultures(cltrs => (checked ? [...cltrs, c.id] : cltrs.filter(c2 => c2 !== c.id)));
+                                                }}
+                                            />
+                                        }
+                                        label={c.name}
+                                    />
+                                ))}
+                        </FormGroup>
+
+                        <Typography variant="h6" gutterBottom>
+                            Max Distance ({maxDistance} km)
+                        </Typography>
                         <StyledSlider
                             valueLabelDisplay="auto"
                             min={10}
@@ -309,8 +407,13 @@ export default function ClothingsFilter({ history }: RouteComponentProps) {
                 <ClothingInFilterCard key={c.id} clothing={c} history={history} />
             ))}
             {!controlsVisible && (
-                <Fab aria-label="Filter" className={classes.fab} color="primary" onClick={() => setControlsVisible(true)}>
+                <Fab aria-label="Filter" className={classes.fabBottom} color="primary" onClick={() => setControlsVisible(true)}>
                     <FilterListIcon />
+                </Fab>
+            )}
+            {controlsVisible && (
+                <Fab aria-label="Filter" className={classes.fabTop} color="default" onClick={() => setControlsVisible(false)}>
+                    <CloseIcon />
                 </Fab>
             )}
         </>
